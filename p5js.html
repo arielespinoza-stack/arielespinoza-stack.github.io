@@ -17,6 +17,8 @@
     .navbar-nav .nav-link { font-size: 1.2rem; padding: 0.5rem 1rem; }
     .nav-link.text-dark:hover { color: #a67c00 !important; }
     h1, .lead { color: #5a4635; }
+    pre { background:#fff; border:1px solid #e5e5e5; border-radius:.5rem; padding:1rem; overflow:auto; text-align:left; }
+    details summary { cursor: pointer; }
   </style>
 </head>
 
@@ -52,8 +54,265 @@
 
     <div class="mb-4">
       <img src="chad face.png" alt="Final self-portrait made in P5JS" class="img-fluid rounded mb-3" width="600" />
-      <img src="draft.png" alt="Draft self-portrait" class="img-fluid rounded" width="700" />
+
+      <section class="text-start mx-auto" style="max-width: 900px;">
+        <h2 class="h5 mb-2">Code for Self-Portrait</h2>
+        <details open>
+          <summary class="mb-2">Show/Hide Code</summary>
+          <pre><code>var img;
+var img;
+//var img2;
+//var img3;
+var initials ='jm'; // your initials
+var choice = '1'; // starting choice, so it is not empty
+var screenbg = 0; // black background
+var lastscreenshot=61; // last screenshot never taken
+
+function preload() {
+// preload runs once, it may make you wait
+//  img = loadImage('cat.png');  // cat.jpg needs to be next to this .js file
+// you can link to an image on your github account
+  img = loadImage('https://veryprofessional3d.github.io/images/cat3.jpg');
+//  img2 = loadImage('https://veryprofessional3d.github.io/images/cat2.jpg');
+//  img3 = loadImage('https://veryprofessional3d.github.io/images/rainbow.gif');
+}
+
+function setup() {
+createCanvas(600, 600);  // canvas size
+background(screenbg);   // black background
+}
+
+function draw() {
+  if (keyIsPressed) {
+    choice = key; // set choice to the key that was pressed
+    clear_print(); // check to see if it is clear screen or save image
+  }
+  if (mouseIsPressed){
+    newkeyChoice(choice);  // if the mouse is pressed call newkeyChoice
+  }
+}
+
+function newkeyChoice(toolChoice) { //toolchoice is the key that was pressed
+  // the key mapping if statements that you can change to do anything you want.
+  // just make sure each key option has a stroke or fill and then what type of 
+  // graphic function
+
+  if (toolChoice == '1') {  // White Fine Brush
+    stroke(255);
+    strokeWeight(2.5); // fine line but not too thin
+    line(pmouseX, pmouseY, mouseX, mouseY);
+
+  } else if (toolChoice == '2') { // Black Airbrush
+    noStroke();
+    for (let i = 0; i < 44; i++) {
+      let ox = random(-30, 30);
+      let oy = random(-30, 30);
+      fill(0, random(10, 60));
+      circle(mouseX + ox, mouseY + oy, random(3, 8));
+    }
+
+  } else if (toolChoice == '3') { // White Medium Brush
+    noStroke();
+    for (let i = 0; i < 20; i++) {
+      fill(255, random(120, 220)); // white with some transparency
+      circle(mouseX + random(-10, 10), mouseY + random(-10, 10), random(4, 10));
+    }
+
+  } else if (toolChoice == '4') { // Black Square Brush small
+    noStroke();
+    fill(0);
+    let size = random(5, 10); // small squares
+    rect(mouseX - size / 2, mouseY - size / 2, size, size);
+
+  } else if (toolChoice == '5') { // Small Black Spray
+    noStroke();
+    for (let i = 0; i < 18; i++) {
+      let ox = random(-12, 12);
+      let oy = random(-12, 12);
+      fill(0, random(50, 150)); // black spray
+      circle(mouseX + ox, mouseY + oy, random(1.5, 4)); // smaller than brush 1
+    }
+
+  } else if (toolChoice == '6') { // Yellow Circle Brush
+    noStroke();
+    fill(255, 215, 0, 180); // yellow with slight transparency
+    let size = random(20, 40); // medium size
+    circle(mouseX, mouseY, size);
+
+  } else if (toolChoice == '7') { // Soft White Spray
+    noStroke();
+    for (let i = 0; i < 30; i++) {
+      let angle = random(TWO_PI);
+      let radius = random(10); // small radius for compact spray
+      let ox = cos(angle) * radius;
+      let oy = sin(angle) * radius;
+      fill(255, random(30, 100)); // softer white, less opacity
+      circle(mouseX + ox, mouseY + oy, random(1, 3)); // small dots
+    }
+
+  } else if (toolChoice == '8') { // White Circle Brush
+    noStroke();
+    fill(255, 255, 255, 200); // solid white with slight transparency
+    let size = random(15, 30); // medium size
+    circle(mouseX, mouseY, size);
+
+  } else if (toolChoice == '9') { // Shadow Block
+    noStroke();
+    fill(20, 20, 20, random(50, 100));
+    ellipse(mouseX, mouseY, random(30, 60), random(20, 50));
+
+  } else if (toolChoice == '0') { // Pink Circle Brush
+    noStroke();
+    fill(255, 105, 180, 180); // soft pink
+    let size = random(20, 40); // medium size
+    circle(mouseX, mouseY, size);
+
+  } else if (toolChoice == 'g' || toolChoice == 'G') { // g places the image we pre-loaded
+    image(img, mouseX, mouseY, 50, 50);
+  }
+}
+ 
+function testbox(r, g, b) {
+// this is a test function that will show you how you can put your own functions into the sketch
+  x = mouseX;
+  y = mouseY;
+  fill(r, g, b);
+  rect(x - 50, y - 50, 100, 100);
+}
+
+function clear_print() {
+// this will do one of two things, x clears the screen by resetting the background
+// p calls the routine saveme, which saves a copy of the screen
+  if (key == 'x' || key == 'X') {
+    background(screenbg); // black background when cleared
+  } else if (key == 'p' || key == 'P') {
+    saveme();  // call saveme which saves an image of the screen
+  }
+}
+
+function saveme() {
+  // this will save the name as the initials, date, time and a millis counting number.
+  // it will always be larger in value then the last one.
+  filename = initials + day() + hour() + minute() + second();
+  if (second() != lastscreenshot) { // don't take a screenshot if you just took one
+    saveCanvas(filename, 'jpg');
+    key = "";
+  }
+  lastscreenshot = second(); // set this to the current second so no more than one per second
+}
+
+</code></pre>
+        </details>
+      </section>
+
+      <img src="draft.png" alt="Draft self-portrait" class="img-fluid rounded mt-5" width="700" />
+
+      <section class="text-start mx-auto mt-3" style="max-width: 900px;">
+        <h2 class="h5 mb-2">Code for Draft Sketch</h2>
+        <details open>
+          <summary class="mb-2">Show/Hide Code</summary>
+          <pre><code>var img;
+//var img2;
+//var img3;
+var initials ='jm'; // your initials
+var choice = '1'; // starting choice, so it is not empty
+var screenbg = 250; // off white background
+var lastscreenshot=61; // last screenshot never taken
+
+function preload() {
+  img = loadImage('https://veryprofessional3d.github.io/images/cat3.jpg');
+}
+
+function setup() {
+  createCanvas(600, 600);  
+  background(screenbg);
+}
+
+function draw() {
+  if (keyIsPressed) {
+    choice = key;
+    clear_print();
+  }
+  if (mouseIsPressed){
+    newkeyChoice(choice);
+  }
+}
+
+function newkeyChoice(toolChoice) {
+  if (toolChoice == '1' ) {
+    strokeWeight(4);
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    
+  } else if (toolChoice == '2') {
+    strokeWeight(20);
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    
+  } else if (toolChoice == '3') {
+    stroke(300, 100, 0, 80);
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    
+  } else if (toolChoice == '4') {
+    stroke(0, 0, 255);
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    
+  } else if (key == '5') {
+    stroke(0, 0, 255);
+    testbox(20, 20, 200);
+    testbox(200, 20, 20);
+    
+  } else if (toolChoice == '6') {
+    stroke(200);
+    line(mouseX, mouseY, pmouseX, pmouseY);
+    
+  } else if (toolChoice == '7') {
+    fill(100, 200, 100);
+    rect(mouseX, mouseY, 20, 20);
+    
+  } else if (toolChoice == '8') {
+    fill(300, 100, 0, 80);
+    rect(mouseX, mouseY, 20, 20);
+    
+  } else if (toolChoice == '9') {
+    fill(300, 100, 0, 80);
+    rect(mouseX, mouseY, 40, 40);
+    
+  } else if (toolChoice == '0') {
+    stroke(0, 0);
+    fill(random(255), random(255), random(255), random(255));
+    rect(mouseX, mouseY, 200, 150);
+    
+  } else if (toolChoice == 'g' || toolChoice == 'G') {
+    image(img, mouseX, mouseY, 50, 50);
+  }
+}
+ 
+function testbox(r, g, b) {
+  x = mouseX;
+  y = mouseY;
+  fill(r, g, b);
+  rect(x-50, y-50, 100, 100);
+}
+
+function clear_print() {
+  if (key == 'x' || key == 'X') {
+    background(screenbg);
+  } else if (key == 'p' || key == 'P') {
+     saveme();
+  }
+}
+
+function saveme(){
+  filename=initials+day() + hour() + minute() +second();
+  if (second()!=lastscreenshot) {
+    saveCanvas(filename, 'jpg');
+    key="";
+  }
+  lastscreenshot=second();
+}</code></pre>
+        </details>
+      </section>
     </div>
+
     <p class="mt-4">
       <a href="index.html" class="btn btn-outline-dark">Back to Home</a>
     </p>
@@ -62,3 +321,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
