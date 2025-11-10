@@ -61,25 +61,23 @@
           <summary class="mb-2">Show/Hide Code</summary>
           <pre><code>var img;
 var img;
-//var img2;
-//var img3;
-var initials ='jm'; // your initials
+var img2; 
+var initials = 'jm'; // your initials
 var choice = '1'; // starting choice, so it is not empty
 var screenbg = 0; // black background
-var lastscreenshot=61; // last screenshot never taken
+var lastscreenshot = 61; // last screenshot never taken
 
 function preload() {
-// preload runs once, it may make you wait
-//  img = loadImage('cat.png');  // cat.jpg needs to be next to this .js file
-// you can link to an image on your github account
+  // preload runs once, it may make you wait
+  //  img = loadImage('cat.png');  // cat.jpg needs to be next to this .js file
+  // you can link to an image on your github account
   img = loadImage('https://veryprofessional3d.github.io/images/cat3.jpg');
-//  img2 = loadImage('https://veryprofessional3d.github.io/images/cat2.jpg');
-//  img3 = loadImage('https://veryprofessional3d.github.io/images/rainbow.gif');
+  img2 = loadImage('https://veryprofessional3d.github.io/images/cat2.jpg');
 }
 
 function setup() {
-createCanvas(600, 600);  // canvas size
-background(screenbg);   // black background
+  createCanvas(600, 600);  // canvas size
+  background(screenbg);    // black background
 }
 
 function draw() {
@@ -87,7 +85,7 @@ function draw() {
     choice = key; // set choice to the key that was pressed
     clear_print(); // check to see if it is clear screen or save image
   }
-  if (mouseIsPressed){
+  if (mouseIsPressed) {
     newkeyChoice(choice);  // if the mouse is pressed call newkeyChoice
   }
 }
@@ -171,18 +169,18 @@ function newkeyChoice(toolChoice) { //toolchoice is the key that was pressed
     image(img, mouseX, mouseY, 50, 50);
   }
 }
- 
+
 function testbox(r, g, b) {
-// this is a test function that will show you how you can put your own functions into the sketch
-  x = mouseX;
-  y = mouseY;
+  // this is a test function that will show you how you can put your own functions into the sketch
+  let x = mouseX;  // local variables
+  let y = mouseY;
   fill(r, g, b);
   rect(x - 50, y - 50, 100, 100);
 }
 
 function clear_print() {
-// this will do one of two things, x clears the screen by resetting the background
-// p calls the routine saveme, which saves a copy of the screen
+  // this will do one of two things, x clears the screen by resetting the background
+  // p calls the routine saveme, which saves a copy of the screen
   if (key == 'x' || key == 'X') {
     background(screenbg); // black background when cleared
   } else if (key == 'p' || key == 'P') {
@@ -193,7 +191,7 @@ function clear_print() {
 function saveme() {
   // this will save the name as the initials, date, time and a millis counting number.
   // it will always be larger in value then the last one.
-  filename = initials + day() + hour() + minute() + second();
+  let filename = initials + day() + hour() + minute() + second(); // local variable
   if (second() != lastscreenshot) { // don't take a screenshot if you just took one
     saveCanvas(filename, 'jpg');
     key = "";
