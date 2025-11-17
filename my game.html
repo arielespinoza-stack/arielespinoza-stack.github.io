@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -21,7 +21,18 @@
       padding-right: 1rem;
     }
     .nav-link.text-dark:hover { color: #a67c00 !important; }
-    main { padding-top: 100px; } 
+    main { padding-top: 110px; }
+
+    #sketch-holder {
+      display: flex;
+      justify-content: center;  
+      align-items: center;      
+      gap: 0.5rem;
+    }
+    #sketch-holder canvas {
+      display: block;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -45,16 +56,17 @@
     </div>
   </nav>
 
-  <div class="container py-5">
-    <h1 class="mb-3">3D Print</h1>
-    <p>
-      3D Printing from Minecraft. Este objeto 3D está basado en el personaje del videojuego Super Mario Bros. 
-      Para el proceso de impresión, primero se diseñó y modeló dentro del videojuego Minecraft. 
-      Luego, usando el software Mineways, el archivo se exportó y posteriormente se imprimió como un objeto físico real.
-    </p>
-  </div>
+  <main>
+    <div class="container pb-4">
+      <h1 class="mb-3">My Game</h1>
+      <p class="lead">
+        This game, made in Processing with code in p5.js, uses the mouse pointer to catch the white circle and earn points.
+        With each level you complete, the difficulty increases.
+      </p>
+    </div>
 
-  <main></main>
+    <div id="sketch-holder" class="container pb-5"></div>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -72,7 +84,7 @@ var cityReady = false;
 var buildings = [];
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(600, 600).parent('sketch-holder');
   textAlign(CENTER);
   textSize(20);
   initCity();
@@ -416,4 +428,5 @@ function levelNine() {
   </script>
 </body>
 </html>
+
 
