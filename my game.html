@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Game p5</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body { background-color: #fdf5e6; color: #333; }
+    .navbar {
+      background-color: #ffffff !important;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-nav .nav-link {
+      font-size: 1.2rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .nav-link.text-dark:hover { color: #a67c00 !important; }
+    main { padding-top: 100px; } 
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top border-bottom">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link text-dark" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="glitch.html">Glitch Art</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="mememashup.html">Meme Mashup</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="minecraft.html">Minecraft</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="net art.html">Net Art</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="3d prints.html">3D Prints</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="p5js.html">P5JS</a></li>
+          <li class="nav-item"><a class="nav-link text-dark" href="my game.html" aria-current="page">My Game</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h1 class="mb-3">3D Print</h1>
+    <p>
+      3D Printing from Minecraft. Este objeto 3D está basado en el personaje del videojuego Super Mario Bros. 
+      Para el proceso de impresión, primero se diseñó y modeló dentro del videojuego Minecraft. 
+      Luego, usando el software Mineways, el archivo se exportó y posteriormente se imprimió como un objeto físico real.
+    </p>
+  </div>
+
+  <main></main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+var ballx = 300;
+var bally = 300;
+var ballSize = 40;
+var score = 0;
+var gameState = "L1";
+var badX = 200;
+var badY = 200;
+var level6Size = 30;
+
+var cityReady = false;
+var buildings = [];
+
+function setup() {
+  createCanvas(600, 600);
+  textAlign(CENTER);
+  textSize(20);
+  initCity();
+  cityReady = true;
+} // end of setup
+
+function draw() {
+  background(220);
+
+  if (gameState == "L1") levelOne();
+  if (gameState == "L2") levelTwo();
+  if (gameState == "L3") levelThree();
+  if (gameState == "L4") levelFour();
+  if (gameState == "L5") levelFive();
+  if (gameState == "L6") levelSix();
+  if (gameState == "L7") levelSeven();
+  if (gameState == "L8") levelEight();
+  if (gameState == "L9") levelNine();
+
+  text("Score: " + score, width / 2.4, 50);
+} // end of draw
+
+function initCity(){
+  buildings = [];
+  var x = 0;
+  while (x < width){
+    var w = random(50, 100);
+    var h = random(160, 380);
+    var winCols = floor(w / 20);
+    var winRows = floor(h / 25);
+    var wins = [];
+    for (var r = 0; r < winRows; r++){
+      wins[r] = [];
+      for (var c = 0; c < winCols; c++){
+        wins[r][c] = random() < 0.4;
+      }
+    }
+    buildings.push({ x: x, w: w, h: h, wins: wins });
+    x += w + random(8, 25);
+  }
+}
+
+function drawCity(){
+  noStroke();
+  fill(30, 30, 45, 220);
+  rect(0, height-120, width, 120);
+
+  for (var i = 0; i < buildings.length; i++){
+    var b = buildings[i];
+    fill(40, 40, 60, 230);
+    rect(b.x, height - b.h, b.w, b.h);
+
+    var winW = 12;
+    var winH = 14;
+    var padX = 6;
+    var padY = 8;
+
+    for (var r = 0; r < b.wins.length; r++){
+      for (var c = 0; c < b.wins[r].length; c++){
+        if (b.wins[r][c]){
+          var wx = b.x + padX + c * (winW + 6);
+          var wy = height - b.h + padY + r * (winH + 8);
+          fill(255, 230, 120, 220);
+          rect(wx, wy, winW, winH, 2);
+        }
+      }
+    }
+
+    fill(60, 60, 80, 220);
+    rect(b.x + b.w * 0.35, height - b.h - 18, b.w * 0.3, 18);
+  }
+}
+
+function showLevelText(levelNum) {
+  fill(255); 
+  text("level " + levelNum, width / 2, height - 20);
+}
+
+function levelOne() {
+  background("lightgreen");
+  if (cityReady) drawCity();
+  showLevelText(1);
+  var d = dist(ballx, bally, mouseX, mouseY);
+  if (d < ballSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+  }
+  if (score > 5) gameState = "L2";
+  fill(255);
+  ellipse(ballx, bally, ballSize, ballSize);
+  stroke(0);
+  line(ballx, bally, mouseX, mouseY);
+  noStroke();
+} // end of level 1
+
+function levelTwo() {
+  background(0, 100, 100);
+  if (cityReady) drawCity();
+  showLevelText(2);
+  var d = dist(ballx, bally, mouseX, mouseY);
+  if (d < ballSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+  }
+  if (score > 10) gameState = "L3";
+  fill(255);
+  ellipse(ballx, bally, ballSize, ballSize);
+} // end of level 2
+
+function levelThree() {
+  background("skyblue");
+  if (cityReady) drawCity();
+  showLevelText(3);
+  var d = dist(ballx, bally, mouseX, mouseY);
+  if (d < ballSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+    if (ballSize > 15) ballSize -= 3;
+  }
+  if (score > 15) gameState = "L4";
+  fill(255);
+  ellipse(ballx, bally, ballSize, ballSize);
+} // end of level 3
+
+function levelFour() {
+  background("steelblue");
+  if (cityReady) drawCity();
+  showLevelText(4);
+  var d = dist(ballx, bally, mouseX, mouseY);
+  var movingSize = 20;
+  ballx += random(-4, 4);
+  bally += random(-4, 4);
+  ballx = constrain(ballx, movingSize / 2, width - movingSize / 2);
+  bally = constrain(bally, movingSize / 2, height - movingSize / 2);
+  if (d < movingSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+    if (score > 25) gameState = "L5";
+  }
+  fill(255);
+  ellipse(ballx, bally, movingSize, movingSize);
+} // end of level 4
+
+function levelFive() {
+  background("violet");
+  if (cityReady) drawCity();
+  showLevelText(5);
+  var d = dist(ballx, bally, mouseX, mouseY);
+  var movingSize = 18;
+  ballx += random(-5, 5);
+  bally += random(-5, 5);
+  ballx = constrain(ballx, movingSize / 2, width - movingSize / 2);
+  bally = constrain(bally, movingSize / 2, height - movingSize / 2);
+  if (d < movingSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+    if (score > 35) gameState = "L6";
+  }
+  fill(255);
+  ellipse(ballx, bally, movingSize, movingSize);
+} // end of level 5
+
+function levelSix() {
+  background("deeppink");
+  if (cityReady) drawCity();
+  showLevelText(6);
+  var goodSize = 35;
+  var badSize = 25;
+  if (!levelSix.badCircles) {
+    levelSix.badCircles = [];
+    for (var i = 0; i < 5; i++) {
+      levelSix.badCircles.push({ x: random(width), y: random(height) });
+    }
+  }
+  var dGood = dist(ballx, bally, mouseX, mouseY);
+  if (dGood < goodSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+    for (var i = 0; i < levelSix.badCircles.length; i++) {
+      levelSix.badCircles[i].x = random(width);
+      levelSix.badCircles[i].y = random(height);
+    }
+  }
+  fill(255);
+  ellipse(ballx, bally, goodSize, goodSize);
+  for (var i = 0; i < levelSix.badCircles.length; i++) {
+    var b = levelSix.badCircles[i];
+    ellipse(b.x, b.y, badSize, badSize);
+    var dBad = dist(b.x, b.y, mouseX, mouseY);
+    if (dBad < badSize) score -= 1;
+  }
+  fill(0);
+  text("Score: " + score, width / 2.4, 50);
+  if (score > 45) gameState = "L7";
+} // end of level 6
+
+function levelSeven() {
+  background("yellow");
+  if (cityReady) drawCity();
+  showLevelText(7);
+  var goodSize = 35;
+  var enemySize = 25;
+  if (!levelSeven.enemies) {
+    levelSeven.enemies = [];
+    for (var i = 0; i < 9; i++) {
+      levelSeven.enemies.push({
+        x: random(width),
+        y: random(height),
+        vx: random(-3, 3),
+        vy: random(-3, 3)
+      });
+    }
+  }
+  var es = levelSeven.enemies;
+  if (dist(ballx, bally, mouseX, mouseY) < goodSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+  }
+  fill(255);
+  ellipse(ballx, bally, goodSize, goodSize);
+  fill(80);
+  for (var i = 0; i < es.length; i++) {
+    var e = es[i];
+    e.x += e.vx;
+    e.y += e.vy;
+    if (e.x < enemySize / 2 || e.x > width - enemySize / 2) e.vx *= -1;
+    if (e.y < enemySize / 2 || e.y > height - enemySize / 2) e.vy *= -1;
+    ellipse(e.x, e.y, enemySize, enemySize);
+    if (dist(e.x, e.y, mouseX, mouseY) < enemySize) score -= 1;
+  }
+  fill(0);
+  text("Score: " + score, width / 2.4, 50);
+  if (score > 60) gameState = "L8";
+} // end of level 7
+
+function levelEight() {
+  background("darkred");
+  if (cityReady) drawCity();
+  showLevelText(8);
+
+  var goodSize = 35;
+  var enemySize = 25;
+
+  ballx += random(-3, 3);
+  bally += random(-3, 3);
+  ballx = constrain(ballx, goodSize / 2, width - goodSize / 2);
+  bally = constrain(bally, goodSize / 2, height - goodSize / 2);
+
+  if (!levelEight.enemies) {
+    levelEight.enemies = [];
+    for (var i = 0; i < 9; i++) {
+      levelEight.enemies.push({
+        x: random(width),
+        y: random(height),
+        vx: random(-4, 4),
+        vy: random(-4, 4)
+      });
+    }
+  }
+  var es = levelEight.enemies;
+
+  if (dist(ballx, bally, mouseX, mouseY) < goodSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+  }
+
+  fill(255);
+  ellipse(ballx, bally, goodSize, goodSize);
+
+  fill(80);
+  for (var i = 0; i < es.length; i++) {
+    var e = es[i];
+    e.x += e.vx;
+    e.y += e.vy;
+    if (e.x < enemySize / 2 || e.x > width - enemySize / 2) e.vx *= -1;
+    if (e.y < enemySize / 2 || e.y > height - enemySize / 2) e.vy *= -1;
+    ellipse(e.x, e.y, enemySize, enemySize);
+    if (dist(e.x, e.y, mouseX, mouseY) < enemySize) score -= 1;
+  }
+
+  fill(0);
+  text("Score: " + score, width / 2.4, 50);
+
+  if (score > 70) gameState = "L9";
+} // end of level 8
+
+function levelNine() {
+  background("lightcoral");
+  if (cityReady) drawCity();
+  showLevelText(9);
+
+  var goodSize = 35;
+  var enemySize = 25;
+
+  ballx += random(-6, 6);
+  bally += random(-6, 6);
+  ballx = constrain(ballx, goodSize / 2, width - goodSize / 2);
+  bally = constrain(bally, goodSize / 2, height - goodSize / 2);
+
+  if (!levelNine.enemies) {
+    levelNine.enemies = [];
+    for (var i = 0; i < 9; i++) {
+      levelNine.enemies.push({
+        x: random(width),
+        y: random(height),
+        vx: random(-5, 5),
+        vy: random(-5, 5)
+      });
+    }
+  }
+  var es = levelNine.enemies;
+
+  if (dist(ballx, bally, mouseX, mouseY) < goodSize) {
+    ballx = random(width);
+    bally = random(height);
+    score++;
+  }
+
+  fill(255);
+  ellipse(ballx, bally, goodSize, goodSize);
+
+  fill(80);
+  for (var i = 0; i < es.length; i++) {
+    var e = es[i];
+    e.x += e.vx;
+    e.y += e.vy;
+    if (e.x < enemySize / 2 || e.x > width - enemySize / 2) e.vx *= -1;
+    if (e.y < enemySize / 2 || e.y > height - enemySize / 2) e.vy *= -1;
+    ellipse(e.x, e.y, enemySize, enemySize);
+    if (dist(e.x, e.y, mouseX, mouseY) < enemySize) score -= 1;
+  }
+} // end of level 9
+  </script>
+</body>
+</html>
+
